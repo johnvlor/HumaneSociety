@@ -1,0 +1,1 @@
+alter table jl.Room add constraint room_number check (room_number >= 10 and room_number <= 30);
