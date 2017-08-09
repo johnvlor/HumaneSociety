@@ -29,13 +29,15 @@ namespace HumaneSociety
                 "\n1. Add an animal to the system" +
                 "\n2. Update adoption status" +
                 "\n3. Room" +
-                "\n4. Shots");
+                "\n4. Shots" +
+                "\n5. Animal Category" +
+                "\n6. Food");
             input = Console.ReadLine();
         }
 
         public void DisplayRoomMenu()
         {
-            Console.WriteLine("\nLook up a room status:" +
+            Console.WriteLine("\nLook up a Room status:" +
                 "\n1. By Room Number" +
                 "\n2. By Animal" +
                 "\n3. Display all occupied rooms");
@@ -44,10 +46,26 @@ namespace HumaneSociety
 
         public void DisplayShotsMenu()
         {
-            Console.WriteLine("\nLook up shot status:" +
+            Console.WriteLine("\nLook up Shots status:" +
                 "\n1. Update Shot status" +
                 "\n2. Display all animals with shots" +
                 "\n3. Display all animals that still needs shots");
+            input = Console.ReadLine();
+        }
+
+        public void DisplayCategoryMenu()
+        {
+            Console.WriteLine("\nLook up Animal Category:" +
+                "\n1. Display categories." +
+                "\n2. Display all animals of a category");
+            input = Console.ReadLine();
+        }
+
+        public void DisplayFoodMenu()
+        {
+            Console.WriteLine("\nLook up Food Status:" +
+                "\n1. By Animal." +
+                "\n2. Update Food Amount");
             input = Console.ReadLine();
         }
 
@@ -71,6 +89,14 @@ namespace HumaneSociety
                 case "4":
                     DisplayShotsMenu();
                     GetShotsMenuOption();
+                    break;
+                case "5":
+                    DisplayCategoryMenu();
+                    GetCategoryMenuOption();
+                    break;
+                case "6":
+                    DisplayFoodMenu();
+                    GetFoodMenuOption();
                     break;
                 default:
                     break;
@@ -107,6 +133,36 @@ namespace HumaneSociety
                     break;
                 case "3":
                     humaneSociety.GetAnimalsWithoutShots();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void GetCategoryMenuOption()
+        {
+            switch (input)
+            {
+                case "1":
+                    humaneSociety.GetAnimalCategories();
+                    break;
+                case "2":
+                    humaneSociety.GetAnimalsInACategory();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void GetFoodMenuOption()
+        {
+            switch (input)
+            {
+                case "1":
+                    humaneSociety.GetFood();
+                    break;
+                case "2":
+                    humaneSociety.UpdateFoodDiet();
                     break;
                 default:
                     break;

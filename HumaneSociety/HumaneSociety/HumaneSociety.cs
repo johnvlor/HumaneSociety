@@ -281,5 +281,101 @@ namespace HumaneSociety
                 Console.WriteLine(a.Name);
             }
         }
+
+        public void GetAnimalCategories()
+        {
+            var animals =
+                (from a in db.Animals
+                select a.Category).Distinct();
+
+            foreach (var a in animals)
+            {
+                Console.WriteLine("Animal Category: {0}", a);
+            }
+        }
+
+        public void GetAnimalsInACategory()
+        {
+            string categoryInput;
+            int count = 0;
+
+            Console.WriteLine("Enter category of an animal: ");
+            categoryInput = Console.ReadLine();
+
+            var animals = db.Animals.Where(a => a.Category == categoryInput);
+
+            if (!animals.Any())
+            {
+                Console.WriteLine("This data does not exist.");
+            }
+            else
+            {
+                foreach (var a in animals)
+                {
+                    Console.WriteLine("Animal: {0}", a.Name);
+                    count++;
+                }
+                Console.WriteLine("\nTotal: {0}", count);
+            }
+        }
+
+        public void GetFood()
+        {
+            string nameInput;
+            int tagInput;
+
+            Console.WriteLine("Enter Animal's Name: ");
+            nameInput = Console.ReadLine();
+
+            Console.WriteLine("Enter Animal's Tag Id: ");
+            tagInput = Convert.ToInt32(Console.ReadLine());
+
+            var animals = db.Animals.Where(a => a.Name == nameInput && a.Animal_Id == tagInput);
+
+            if (!animals.Any())
+            {
+                Console.WriteLine("This record does not exist.");
+            }
+            else
+            {
+                foreach (var a in animals)
+                {
+                    Console.WriteLine("{0} will need to consume {1} of food a week.", a.Name, a.Food);
+                }
+            }
+        }
+
+        public void UpdateFoodDiet()
+        {
+            string nameInput;
+            int tagInput;
+            string foodInput;
+
+            Console.WriteLine("Enter Animal's Name: ");
+            nameInput = Console.ReadLine();
+
+            Console.WriteLine("Enter Animal's Tag Id: ");
+            tagInput = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter new Food amount: ");
+            foodInput = Console.ReadLine();
+
+            var animals = db.Animals.Where(a => a.Name == nameInput && a.Animal_Id == tagInput);
+
+            if (!animals.Any())
+            {
+                Console.WriteLine("This record does not exist.");
+            }
+            else
+            {
+                foreach (var a in animals)
+                {
+                    a.Food = foodInput;
+                }
+                db.SubmitChanges();
+
+                Console.WriteLine("Shots status changed.");
+            }
+        }
     }
 }
