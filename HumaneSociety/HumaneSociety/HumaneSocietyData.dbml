@@ -10,13 +10,6 @@
       <Column Name="Animal_Age" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="jl.Room" Member="Rooms">
-    <Type Name="Room">
-      <Column Name="Room_Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Room_Number" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Room_Animal" Member="Animals" ThisKey="Room_Id" OtherKey="Room_Id" Type="Animal" />
-    </Type>
-  </Table>
   <Table Name="jl.Animal" Member="Animals">
     <Type Name="Animal">
       <Column Name="Animal_Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -28,7 +21,14 @@
       <Column Name="Food" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="Status" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
       <Column Name="Room_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Room_Animal" Member="Room" ThisKey="Room_Id" OtherKey="Room_Id" Type="Room" IsForeignKey="true" />
+      <Association Name="Room_Animal" Member="Room" ThisKey="Room_Id" OtherKey="Room_Id" Type="Room" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="jl.Room" Member="Rooms">
+    <Type Name="Room">
+      <Column Name="Room_Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Room_Number" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Room_Animal" Member="Animals" ThisKey="Room_Id" OtherKey="Room_Id" Type="Animal" />
     </Type>
   </Table>
 </Database>

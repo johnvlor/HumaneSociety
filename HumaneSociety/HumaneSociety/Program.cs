@@ -12,9 +12,6 @@ namespace HumaneSociety
     {
         static void Main(string[] args)
         {
-            //HumaneSociety humaneSociety = new HumaneSociety();
-            //humaneSociety.Run();
-
             Menu menu = new Menu();
             menu.Run();
 

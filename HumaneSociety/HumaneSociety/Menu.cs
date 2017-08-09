@@ -46,12 +46,13 @@ namespace HumaneSociety
             switch (input)
             {
                 case "1":
-                    //GetAnimalInformation();
-                    //AddToDatabase();
+                    humaneSociety.GetAnimalInformation();
+                    humaneSociety.AddToDatabase();
                     humaneSociety.DisplayQuery();
                     break;
                 case "2":
-                    humaneSociety.UpdateStatus();
+                    //humaneSociety.UpdateStatus();
+                    humaneSociety.RemoveRoomNumber();
                     break;
                 case "3":
                     DisplayRoomMenu();

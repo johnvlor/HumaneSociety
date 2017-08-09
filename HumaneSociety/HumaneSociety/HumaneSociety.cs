@@ -9,7 +9,7 @@ namespace HumaneSociety
 {
     class HumaneSociety
     {
-        Animal newAnimals;
+        public Animal newAnimals;
         Room newRoom;
         DataClassesDataContext db;
 
@@ -19,7 +19,6 @@ namespace HumaneSociety
             newAnimals = new Animal();
             newRoom = new Room();
         }
-
 
         public Animal GetAnimalInformation()
         {
@@ -42,7 +41,7 @@ namespace HumaneSociety
             newAnimals.Food = Console.ReadLine();
 
             //Console.WriteLine("Status: ");
-            //newAnimals.Status = Console.ReadLine();
+            newAnimals.Status = "Available";
 
             EnterRoomInformation();
 
@@ -50,7 +49,7 @@ namespace HumaneSociety
         }
 
         
-        public void AddToDatabase(Animal newAnimals)
+        public void AddToDatabase()
         {
             db.Animals.InsertOnSubmit(newAnimals);
             db.SubmitChanges();
@@ -58,7 +57,7 @@ namespace HumaneSociety
 
         public void DisplayQuery()
         {
-            var animals = db.Animals.Where(a => a.Category == "Dog");
+            var animals = db.Animals;
                 //from a in db.Animals
                 //select a;
 
@@ -92,13 +91,28 @@ namespace HumaneSociety
             var animals = db.Animals.Where(a => a.Name == nameInput && a.Animal_Id == tagInput);
 
             foreach (var a in animals)
+            {
                 a.Status = "Adopted";
+            }
 
             db.SubmitChanges();
 
             Console.WriteLine("Adoption status changed.");
         }
 
+        public void RemoveRoomNumber()
+        {
+            var animals = db.Animals.Where(a => a.Status == "Adopted");
+
+            foreach (var a in animals)
+            {
+                a.Room_Id = null;
+            }
+
+            db.SubmitChanges();
+
+            Console.WriteLine("Room Number is now available.");
+        }
 
         public void EnterRoomInformation()
         {
@@ -163,9 +177,16 @@ namespace HumaneSociety
 
             var animals = db.Animals.Where(a => a.Room.Room_Number == roomInput);
 
-            foreach (var a in animals)
+            if (!animals.Any())
             {
-                Console.WriteLine("Room {0} is occupied by {1}.", a.Room.Room_Number, a.Name);
+                Console.WriteLine("Room is not occupied and available.");
+            }
+            else
+            {
+                foreach (var a in animals)
+                {
+                    Console.WriteLine("Room {0} is occupied by {1}.", a.Room.Room_Number, a.Name);
+                }
             }
         }
 
@@ -190,10 +211,7 @@ namespace HumaneSociety
 
         public void LookUpAllOccupiedRooms()
         {
-            var animals =
-                from a in db.Animals
-                where a.Room.Room_Number != null
-                select a;
+            var animals = db.Animals.Where(a => a.Room.Room_Number != null);
 
             foreach (var a in animals)
             {
