@@ -40,7 +40,8 @@ namespace HumaneSociety
             Console.WriteLine("\nLook up a Room status:" +
                 "\n1. By Room Number" +
                 "\n2. By Animal" +
-                "\n3. Display all occupied rooms");
+                "\n3. Display all occupied rooms" +
+                "\n4. Display all available rooms");
             input = Console.ReadLine();
         }
 
@@ -75,7 +76,7 @@ namespace HumaneSociety
             {
                 case "1":
                     humaneSociety.GetAnimalInformation();
-                    humaneSociety.AddToDatabase();
+                    //humaneSociety.AddToDatabase();
                     humaneSociety.DisplayQuery();
                     break;
                 case "2":
@@ -114,7 +115,10 @@ namespace HumaneSociety
                     humaneSociety.GetRoomByAnimal();
                     break;
                 case "3":
-                    humaneSociety.GetAllOccupiedRooms();
+                    humaneSociety.GetAllOccupiedRooms();                   
+                    break;
+                case "4":
+                    humaneSociety.GetAvailableRooms();
                     break;
                 default:
                     break;

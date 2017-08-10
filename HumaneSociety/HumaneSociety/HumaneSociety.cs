@@ -135,45 +135,50 @@ namespace HumaneSociety
                 return;
             }
             CheckRoomStatus();
-
+            //newAnimals.Room.Room_Number
             newAnimals.Room = newRoom;
         }
 
         public void CheckRoomStatus()
         {
-            var rooms =
-                from a in db.Rooms
-                select a;
+            var rooms = db.Rooms.Where(a => db.Animals.Any(r => r.Room_Id == a.Room_Id));
+            //from a in db.Rooms
+            //    join r in db.Animals on a.Room_Id equals r.Room_Id
+            //    where a.Room_Number == newRoom.Room_Number && r.Room_Id != a.Room_Id
+            //    select a;
+            //from a in db.Rooms
+            //where a.Room_Number == newRoom.Room_Number
+            //select a;
 
-            foreach (var a in rooms)
+            if (!rooms.Any())
             {
-                if (newRoom.Room_Number == a.Room_Number)
+                Console.WriteLine("This record does not exist.");
+            }
+            else
+            {
+                foreach (var r in rooms)
                 {
-                    Console.WriteLine("Room is not available.  Please choose another one.");
-                    EnterRoomInformation();
-                    return;
+                    if (newRoom.Room_Number == r.Room_Number)
+                    {
+                        
+                        Console.WriteLine("Room is not available.  Please choose another one.");
+                        EnterRoomInformation();
+                        return;
+                    }                  
                 }
+                Console.WriteLine("Room is available.");
             }
         }
 
-        //public void GetAvailableRoom()
-        //{
-        //    var rooms = 
-        //        from a in db.Rooms
-        //        select a;
-          
-        //    for (int i = 10; i <= 30; i++)
-        //    {
-        //        foreach (var a in rooms)
-        //        {
-        //            if (i != a.Room_Number)
-        //            {
-        //                Console.WriteLine("Rooms available: " + i);
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
+        public void GetAvailableRooms()
+        {
+            var rooms = db.Rooms.Where(a => !db.Animals.Any(r => r.Room_Id == a.Room_Id));
+
+            foreach (var r in rooms)
+            {
+                Console.WriteLine("Room: " + r.Room_Number);
+            }
+        }
 
         public void GetRoomNumber()
         {
@@ -374,7 +379,7 @@ namespace HumaneSociety
                 }
                 db.SubmitChanges();
 
-                Console.WriteLine("Shots status changed.");
+                Console.WriteLine("Food amount changed.");
             }
         }
     }
