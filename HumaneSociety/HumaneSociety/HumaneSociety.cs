@@ -56,30 +56,34 @@ namespace HumaneSociety
 
         public void DisplayQuery()
         {
-            var animals = db.Animals;
-                //from a in db.Animals
-                //select a;
+            var animals = /*db.Animals;*/
+                from a in db.Animals
+                join r in db.Rooms on a.Room_Id equals r.Room_Id
+                select a;
 
-            foreach (var x in animals)
+            foreach (var a in animals)
             {
                 Console.WriteLine();
-                Console.WriteLine("Tag ID: " + x.Animal_Id);
-                Console.WriteLine("Name: " + x.Name);
-                Console.WriteLine("Category: " + x.Category);
-                Console.WriteLine("Gender: " + x.Gender);
-                Console.WriteLine("Age: " + x.Age);
-                Console.WriteLine("Status: " + x.Status);
-                //Console.WriteLine("Room: " + x.Room.Room_Number);
-                Console.WriteLine("Shots: " + x.Shots);
-                Console.WriteLine("Food: " + x.Food);
+                Console.WriteLine("Tag ID: " + a.Animal_Id);
+                Console.WriteLine("Name: " + a.Name);
+                Console.WriteLine("Category: " + a.Category);
+                Console.WriteLine("Gender: " + a.Gender);
+                Console.WriteLine("Age: " + a.Age);
+                Console.WriteLine("Status: " + a.Status);
+                Console.WriteLine("Room: " + a.Room.Room_Number);
+                Console.WriteLine("Shots: " + a.Shots);
+                Console.WriteLine("Food: " + a.Food);
             }
 
         }
 
-        public void UpdateAdoptionStatus()
+       public void StartAdoptionProcess()
         {
             string nameInput;
             int tagInput;
+            string customerFirstNameInput;
+            string customerLastNameInput;
+            int idInput;
 
             Console.WriteLine("Enter Animal's Name: ");
             nameInput = Console.ReadLine();
@@ -87,6 +91,20 @@ namespace HumaneSociety
             Console.WriteLine("Enter Animal's Tag Id: ");
             tagInput = Convert.ToInt32(Console.ReadLine());
 
+            Console.WriteLine("Enter Adopting Customer's First Name: ");
+            customerFirstNameInput = Console.ReadLine();
+
+            Console.WriteLine("Enter Adopting Customer's Last Name: ");
+            customerLastNameInput = Console.ReadLine();
+
+            Console.WriteLine("Enter Customer's Identification Number: ");
+            idInput = Convert.ToInt32(Console.ReadLine());
+
+            UpdateAdoptionStatus(nameInput, tagInput, idInput);
+        }
+
+        public void UpdateAdoptionStatus(string nameInput, int tagInput, int idInput)
+        {
             var animals = db.Animals.Where(a => a.Name == nameInput && a.Animal_Id == tagInput);
 
             if (!animals.Any())
@@ -98,11 +116,12 @@ namespace HumaneSociety
                 foreach (var a in animals)
                 {
                     a.Status = "Adopted";
+                    a.Adopter_Id = idInput;
                 }
 
                 db.SubmitChanges();
 
-                Console.WriteLine("Adoption status changed.");
+                Console.WriteLine("Adoption status updated.");
             }
         }
 
@@ -117,7 +136,61 @@ namespace HumaneSociety
 
             db.SubmitChanges();
 
-            Console.WriteLine("Room Number is now available.");
+            Console.WriteLine("Room is now available.");
+        }
+
+        public void GetAllAdoptedAnimals()
+        {
+            var animals = 
+                from a in db.Animals
+                join c in db.Adopters on a.Adopter_Id equals c.Adopter_Id
+                where a.Status == "Adopted"
+                select a;
+
+            Console.WriteLine("\nList of adopted animals.");
+            if (!animals.Any())
+            {
+                Console.WriteLine("This record does not exist.");
+            }
+            else
+            {
+                foreach (var a in animals)
+                {
+                    Console.WriteLine("{0} adopted by {1} {2}", a.Name, a.Adopter.First_Name, a.Adopter.Last_Name);
+                }
+            }
+            
+        }
+
+        public void GetAdoptedAnimal()
+        {
+            string nameInput;
+            int tagInput;
+
+            Console.WriteLine("Enter Animal's Name: ");
+            nameInput = Console.ReadLine();
+
+            Console.WriteLine("Enter Animal's Tag Id: ");
+            tagInput = Convert.ToInt32(Console.ReadLine());
+
+            var animals =
+                from a in db.Animals
+                join c in db.Adopters on a.Adopter_Id equals c.Adopter_Id
+                where (a.Name == nameInput && a.Animal_Id == tagInput && a.Status == "Adopted")
+                select a;
+
+            if (!animals.Any())
+            {
+                Console.WriteLine("This record does not exist.");
+            }
+            else
+            {
+                foreach (var a in animals)
+                {
+                    Console.WriteLine("\n{0} adopted by {1} {2}", a.Name, a.Adopter.First_Name, a.Adopter.Last_Name);
+                }
+            }
+
         }
 
         public void EnterRoomInformation()

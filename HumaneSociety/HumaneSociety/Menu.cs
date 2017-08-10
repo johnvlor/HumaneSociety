@@ -37,12 +37,21 @@ namespace HumaneSociety
         {           
             Console.WriteLine("Enter an option:" +
                 "\n1. Add an animal to the system" +
-                "\n2. Update adoption status" +
+                "\n2. Adoption Process" +
                 "\n3. Room" +
                 "\n4. Shots" +
                 "\n5. Animal Category" +
                 "\n6. Food" +
                 "\n7. Customer");
+            input = Console.ReadLine();
+        }
+
+        public void DisplayAdoptionMenu()
+        {
+            Console.WriteLine("\nEnter an option:" +
+                "\n1. Start Adoption Process" +
+                "\n2. Look up an Adopted Animal" +
+                "\n3. Display all Adopted animals");
             input = Console.ReadLine();
         }
 
@@ -68,7 +77,7 @@ namespace HumaneSociety
         public void DisplayCategoryMenu()
         {
             Console.WriteLine("\nLook up Animal Category:" +
-                "\n1. Display categories." +
+                "\n1. Display animal categories." +
                 "\n2. Display all animals of a category");
             input = Console.ReadLine();
         }
@@ -120,13 +129,13 @@ namespace HumaneSociety
             switch (input)
             {
                 case "1":
-                    humaneSociety.GetAnimalInformation();
-                    //humaneSociety.AddToDatabase();
+                    //humaneSociety.GetAnimalInformation();
+                   // humaneSociety.AddToDatabase();
                     humaneSociety.DisplayQuery();
                     break;
                 case "2":
-                    humaneSociety.UpdateAdoptionStatus();
-                    humaneSociety.RemoveRoomNumber();
+                    DisplayAdoptionMenu();
+                    GetAdoptionMenuOption();
                     break;
                 case "3":
                     DisplayRoomMenu();
@@ -147,6 +156,25 @@ namespace HumaneSociety
                 case "7":
                     DisplayAdoptingCustomerMenu();
                     GetAdoptingCustomerMenuOption();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void GetAdoptionMenuOption()
+        {
+            switch (input)
+            {
+                case "1":
+                    humaneSociety.StartAdoptionProcess();
+                    humaneSociety.RemoveRoomNumber();
+                    break;
+                case "2":
+                    humaneSociety.GetAdoptedAnimal();
+                    break;
+                case "3":
+                    humaneSociety.GetAllAdoptedAnimals();
                     break;
                 default:
                     break;
