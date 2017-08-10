@@ -129,8 +129,9 @@ namespace HumaneSociety
             switch (input)
             {
                 case "1":
-                    //humaneSociety.GetAnimalInformation();
-                   // humaneSociety.AddToDatabase();
+                    humaneSociety.GetAnimalInformation();
+                    humaneSociety.AddToDatabase();
+                    humaneSociety.EnterRoomInformation();
                     humaneSociety.DisplayQuery();
                     break;
                 case "2":
@@ -277,7 +278,7 @@ namespace HumaneSociety
                     //customer.AddCustomerToDatabase();
                     break;
                 case "2":
-                    
+                    customer.SearchAnimals();
                     break;
                 default:
                     break;

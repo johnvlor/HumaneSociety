@@ -42,7 +42,7 @@ namespace HumaneSociety
 
             newAnimals.Status = "Available";
 
-            EnterRoomInformation();
+            //EnterRoomInformation();
 
             return newAnimals;
         }
@@ -158,8 +158,7 @@ namespace HumaneSociety
                 {
                     Console.WriteLine("{0} adopted by {1} {2}", a.Name, a.Adopter.First_Name, a.Adopter.Last_Name);
                 }
-            }
-            
+            }            
         }
 
         public void GetAdoptedAnimal()
@@ -208,7 +207,27 @@ namespace HumaneSociety
             }
             CheckRoomStatus();
 
-            newAnimals.Room = newRoom;
+            var rooms =
+                from r in db.Rooms
+                where r.Room_Number == newRoom.Room_Number
+                select r;
+
+            if (!rooms.Any())
+            {
+                Console.WriteLine("This record does not exist.");
+            }
+            else
+            {
+                foreach (var r in rooms)
+                {
+                    Console.WriteLine(r.Room_Id + " " + r.Room_Number);
+                    newAnimals.Room = r;
+                }
+            }
+            //newAnimals.Room = newRoom;
+
+
+            db.SubmitChanges();
         }
 
         public void CheckRoomStatus()

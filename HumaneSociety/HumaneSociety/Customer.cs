@@ -69,5 +69,34 @@ namespace HumaneSociety
             db.Adopters.InsertOnSubmit(newAdopter);
             db.SubmitChanges();
         }
+
+        public void SearchAnimals()
+        {
+            string nameInput;
+            string categoryInput;
+
+            Console.WriteLine("Please enter your search criteria");
+
+            Console.WriteLine("Enter Animal's Name: ");
+            nameInput = Console.ReadLine();
+
+            Console.WriteLine("Enter an Animal Category: ");
+            categoryInput = Console.ReadLine();
+
+            var animals = db.Animals.Where(a => a.Name == nameInput || a.Category == categoryInput);
+
+            if (!animals.Any())
+            {
+                Console.WriteLine("This record does not exist.");
+            }
+            else
+            {
+                foreach (var a in animals)
+                {
+                    Console.WriteLine(a.Name);
+                    Console.WriteLine(a.Category);
+                }
+            }
+        }
     }
 }
