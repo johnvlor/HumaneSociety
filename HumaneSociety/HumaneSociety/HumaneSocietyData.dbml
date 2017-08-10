@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="HumaneSociety" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=JLOR-ASUS;Initial Catalog=HumaneSociety;Integrated Security=True" SettingsObjectName="HumaneSociety.Properties.Settings" SettingsPropertyName="HumaneSocietyConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="jl.Room" Member="Rooms">
+    <Type Name="Room">
+      <Column Name="Room_Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Room_Number" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Room_Animal" Member="Animals" ThisKey="Room_Id" OtherKey="Room_Id" Type="Animal" />
+    </Type>
+  </Table>
   <Table Name="jl.Animal" Member="Animals">
     <Type Name="Animal">
       <Column Name="Animal_Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -14,13 +21,6 @@
       <Column Name="Adopter_Id" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Association Name="Room_Animal" Member="Room" ThisKey="Room_Id" OtherKey="Room_Id" Type="Room" IsForeignKey="true" />
       <Association Name="Adopter_Animal" Member="Adopter" ThisKey="Adopter_Id" OtherKey="Adopter_Id" Type="Adopter" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="jl.Room" Member="Rooms">
-    <Type Name="Room">
-      <Column Name="Room_Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Room_Number" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Room_Animal" Member="Animals" ThisKey="Room_Id" OtherKey="Room_Id" Type="Animal" />
     </Type>
   </Table>
   <Table Name="jl.Adopter" Member="Adopters">

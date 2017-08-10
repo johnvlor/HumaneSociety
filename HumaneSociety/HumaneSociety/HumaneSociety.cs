@@ -40,7 +40,6 @@ namespace HumaneSociety
             Console.WriteLine("Food: ");
             newAnimals.Food = Console.ReadLine().ToLower();
 
-            //Console.WriteLine("Status: ");
             newAnimals.Status = "Available";
 
             EnterRoomInformation();
@@ -135,20 +134,13 @@ namespace HumaneSociety
                 return;
             }
             CheckRoomStatus();
-            //newAnimals.Room.Room_Number
+
             newAnimals.Room = newRoom;
         }
 
         public void CheckRoomStatus()
         {
             var rooms = db.Rooms.Where(a => db.Animals.Any(r => r.Room_Id == a.Room_Id));
-            //from a in db.Rooms
-            //    join r in db.Animals on a.Room_Id equals r.Room_Id
-            //    where a.Room_Number == newRoom.Room_Number && r.Room_Id != a.Room_Id
-            //    select a;
-            //from a in db.Rooms
-            //where a.Room_Number == newRoom.Room_Number
-            //select a;
 
             if (!rooms.Any())
             {
@@ -380,6 +372,75 @@ namespace HumaneSociety
                 db.SubmitChanges();
 
                 Console.WriteLine("Food amount changed.");
+            }
+        }
+
+        public void GetCustomer()
+        {
+            string firstNameInput;
+            string lastNameInput;
+
+            Console.WriteLine("Enter Adopting Customer's First Name: ");
+            firstNameInput = Console.ReadLine().ToLower();
+
+            Console.WriteLine("Enter Adopting Customer's Last Name: ");
+            lastNameInput = Console.ReadLine().ToLower();
+
+            var customers = db.Adopters.Where(c => c.First_Name == firstNameInput && c.Last_Name == lastNameInput);
+
+            if (!customers.Any())
+            {
+                Console.WriteLine("This record does not exist.");
+            }
+            else
+            {
+                foreach (var c in customers)
+                {
+                    Console.WriteLine("\nCustomer Name: {0} {1}", c.First_Name, c.Last_Name);
+                    Console.WriteLine("Address: {0}", c.Address);
+                    Console.WriteLine("Phone: {0}", c.Phone);
+                    Console.WriteLine("Previously Owned a Pet: {0}", c.Previous_Pet_Owner);
+                    Console.WriteLine("Homeowner or Renter: {0}", c.Homeowner_Renter);
+                    Console.WriteLine("Pet Preference: {0}", c.Animal_Preference);
+                }
+            }
+        }
+
+        public void GetAllCustomers()
+        {
+            var customers = db.Adopters;
+
+            foreach (var c in customers)
+            {
+                Console.WriteLine("\nCustomer Name: {0} {1}", c.First_Name, c.Last_Name);
+                Console.WriteLine("Address: {0}", c.Address);
+                Console.WriteLine("Phone: {0}", c.Phone);
+                Console.WriteLine("Previously Owned a Pet: {0}", c.Previous_Pet_Owner);
+                Console.WriteLine("Homeowner or Renter: {0}", c.Homeowner_Renter);
+                Console.WriteLine("Pet Preference: {0}", c.Animal_Preference);
+            }
+        }
+
+        public void GetCustomerAnimalPreference()
+        {
+            string preferenceInput;
+
+            Console.WriteLine("Enter Animal Preference Category: ");
+            preferenceInput = Console.ReadLine().ToLower();
+
+            var customers = db.Adopters.Where(c => c.Animal_Preference == preferenceInput);
+
+            if (!customers.Any())
+            {
+                Console.WriteLine("This record does not exist.");
+            }
+            else
+            {
+                Console.WriteLine("\nCustomers interested in adopting {0}.", preferenceInput);
+                foreach (var c in customers)
+                {
+                    Console.WriteLine("Customer Name: {0} {1}", c.First_Name, c.Last_Name);
+                }              
             }
         }
     }
