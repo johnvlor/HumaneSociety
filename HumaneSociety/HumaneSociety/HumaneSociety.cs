@@ -11,6 +11,7 @@ namespace HumaneSociety
     {
         public Animal newAnimals;
         Room newRoom;
+        AdoptionFee newAdoptionFee;
         DataClassesDataContext db;
 
         public HumaneSociety()
@@ -18,36 +19,136 @@ namespace HumaneSociety
             db = new DataClassesDataContext();
             newAnimals = new Animal();
             newRoom = new Room();
+            newAdoptionFee = new AdoptionFee();
         }
 
-        public Animal GetAnimalInformation()
+        public Animal AddAnimalInformation()
         {
-            Console.WriteLine("Name: ");
-            newAnimals.Name = Console.ReadLine();
+            //Console.WriteLine("Name: ");
+            //newAnimals.Name = Console.ReadLine();
+            EnterAnimalName();
 
-            Console.WriteLine("Category: ");
-            newAnimals.Category = Console.ReadLine().ToLower();
+            //Console.WriteLine("Category: ");
+            //newAnimals.Category = Console.ReadLine().ToLower();
+            EnterAnimalCategory();
 
-            Console.WriteLine("Gender: ");
-            newAnimals.Gender = Console.ReadLine().ToLower();
+            //Console.WriteLine("Gender: ");
+            //newAnimals.Gender = Console.ReadLine().ToLower();
+            EnterAnimalGender();
 
-            Console.WriteLine("Age: ");
-            newAnimals.Age = Console.ReadLine().ToLower();
+            //Console.WriteLine("Age: ");
+            //newAnimals.Age = Console.ReadLine().ToLower();
+            EnterAnimalAge();
 
-            Console.WriteLine("Shots: ");
-            newAnimals.Shots = Console.ReadLine().ToLower();
+            //Console.WriteLine("Shots: ");
+            //newAnimals.Shots = Console.ReadLine().ToLower();
+            EnterAnimalShots();
 
-            Console.WriteLine("Food: ");
-            newAnimals.Food = Console.ReadLine().ToLower();
+            //Console.WriteLine("Food: ");
+            //newAnimals.Food = Console.ReadLine().ToLower();
+            EnterAnimalFood();
 
             newAnimals.Status = "Available";
 
-            //EnterRoomInformation();
+            EnterAdoptionFee();
 
             return newAnimals;
         }
 
-        
+        public void EnterAnimalId()
+        {
+            Console.WriteLine("Animal's Tag Id: ");
+            newAnimals.Animal_Id = Convert.ToInt32(Console.ReadLine());
+        }
+
+        public void EnterAnimalName()
+        {
+            Console.WriteLine("Animal's Name: ");
+            newAnimals.Name = Console.ReadLine().ToLower();
+        }
+
+        public void EnterAnimalCategory()
+        {
+            Console.WriteLine("Category: ");
+            newAnimals.Category = Console.ReadLine().ToLower();
+        }
+
+        public void EnterAnimalGender()
+        {
+            Console.WriteLine("Gender: ");
+            newAnimals.Gender = Console.ReadLine().ToLower();
+
+            if(newAnimals.Gender != "male" && newAnimals.Gender != "female")
+            {
+                Console.WriteLine("Please try again.  Enter either male or female.");
+                EnterAnimalGender();
+                return;
+            }
+        }
+
+        public void EnterAnimalAge()
+        {
+            Console.WriteLine("Age: ");
+            newAnimals.Age = Console.ReadLine().ToLower();
+        }
+
+        public void EnterAnimalShots()
+        {
+            Console.WriteLine("Shots (yes or no): ");
+            newAnimals.Shots = Console.ReadLine().ToLower();
+
+            if (newAnimals.Shots != "yes" && newAnimals.Shots != "no")
+            {
+                Console.WriteLine("Please try again.  Enter either yes or no.");
+                EnterAnimalShots();
+                return;
+            }
+        }
+
+        public void EnterAnimalFood()
+        {
+            Console.WriteLine("Food: ");
+            newAnimals.Food = Console.ReadLine().ToLower();
+        }
+
+        public void EnterRoomNumber()
+        {
+            Console.WriteLine("Room Number: ");
+            try
+            {
+                newRoom.Room_Number = Convert.ToInt32(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid input.  Please enter a number.");
+                EnterRoomNumber();
+                return;
+            }
+        }
+
+        public void EnterAdoptionFee()
+        {
+            Console.WriteLine("Adoption Fee Pricing - $50, $75, $100, $200" +
+                "\nEnter Amount:");
+            try
+            {
+                newAdoptionFee.Adoption_Fee = Convert.ToInt32(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid input.  Please enter a number.");
+                EnterAdoptionFee();
+                return;
+            }
+
+            if (newAdoptionFee.Adoption_Fee != 200 || newAdoptionFee.Adoption_Fee != 100 || newAdoptionFee.Adoption_Fee != 75 || newAdoptionFee.Adoption_Fee != 50)
+            {
+                Console.WriteLine("Invalid input.  Please follow the Fee pricing $50, $75, $100, $200");
+                EnterAdoptionFee();
+                return;
+            }
+        }
+
         public void AddToDatabase()
         {
             db.Animals.InsertOnSubmit(newAnimals);
@@ -73,23 +174,27 @@ namespace HumaneSociety
                 Console.WriteLine("Room: " + a.Room.Room_Number);
                 Console.WriteLine("Shots: " + a.Shots);
                 Console.WriteLine("Food: " + a.Food);
+                Console.WriteLine("Adoption Fee: " + a.AdoptionFee.Adoption_Fee);
             }
 
         }
 
        public void StartAdoptionProcess()
         {
-            string nameInput;
-            int tagInput;
+            //string nameInput;
+            //int tagInput;
             string customerFirstNameInput;
             string customerLastNameInput;
             int idInput;
 
-            Console.WriteLine("Enter Animal's Name: ");
-            nameInput = Console.ReadLine();
+            //Console.WriteLine("Enter Animal's Name: ");
+            //nameInput = Console.ReadLine();
 
-            Console.WriteLine("Enter Animal's Tag Id: ");
-            tagInput = Convert.ToInt32(Console.ReadLine());
+            //Console.WriteLine("Enter Animal's Tag Id: ");
+            //tagInput = Convert.ToInt32(Console.ReadLine());
+
+            EnterAnimalName();
+            EnterAnimalId();
 
             Console.WriteLine("Enter Adopting Customer's First Name: ");
             customerFirstNameInput = Console.ReadLine();
@@ -100,12 +205,13 @@ namespace HumaneSociety
             Console.WriteLine("Enter Customer's Identification Number: ");
             idInput = Convert.ToInt32(Console.ReadLine());
 
-            UpdateAdoptionStatus(nameInput, tagInput, idInput);
+            UpdateAdoptionStatus(idInput);
+            CollectAdoptionFee(idInput);
         }
 
-        public void UpdateAdoptionStatus(string nameInput, int tagInput, int idInput)
+        public void UpdateAdoptionStatus(int idInput)
         {
-            var animals = db.Animals.Where(a => a.Name == nameInput && a.Animal_Id == tagInput);
+            var animals = db.Animals.Where(a => a.Animal_Id == newAnimals.Animal_Id);
 
             if (!animals.Any())
             {
@@ -117,12 +223,30 @@ namespace HumaneSociety
                 {
                     a.Status = "Adopted";
                     a.Adopter_Id = idInput;
+
+                    Console.WriteLine("{0} has been adopted." +
+                        "\nAdoption status updated.", a.Name);
                 }
 
                 db.SubmitChanges();
-
-                Console.WriteLine("Adoption status updated.");
             }
+        }
+
+        public void CollectAdoptionFee(int idInput)
+        {
+            var animals =
+                from a in db.Animals
+                join c in db.Adopters on a.Adopter_Id equals c.Adopter_Id
+                where a.Animal_Id == newAnimals.Animal_Id && c.Adopter_Id == idInput
+                select a;
+
+            foreach (var a in animals)
+            {
+                a.Adopter.Paid_Amount = a.AdoptionFee.Adoption_Fee;
+                Console.WriteLine("Adoption Fee Paid: ${0}", a.Adopter.Paid_Amount);
+            }
+
+            db.SubmitChanges();
         }
 
         public void RemoveRoomNumber()
@@ -156,45 +280,49 @@ namespace HumaneSociety
             {
                 foreach (var a in animals)
                 {
-                    Console.WriteLine("{0} adopted by {1} {2}", a.Name, a.Adopter.First_Name, a.Adopter.Last_Name);
+                    Console.WriteLine("{0} - adopted by {1} {2}", a.Name, a.Adopter.First_Name, a.Adopter.Last_Name);
                 }
             }            
         }
 
         public void GetAdoptedAnimal()
         {
-            string nameInput;
-            int tagInput;
+            //string nameInput;
+            //int tagInput;
 
-            Console.WriteLine("Enter Animal's Name: ");
-            nameInput = Console.ReadLine();
+            //Console.WriteLine("Enter Animal's Name: ");
+            //nameInput = Console.ReadLine();
 
-            Console.WriteLine("Enter Animal's Tag Id: ");
-            tagInput = Convert.ToInt32(Console.ReadLine());
+            //Console.WriteLine("Enter Animal's Tag Id: ");
+            //tagInput = Convert.ToInt32(Console.ReadLine());
+
+            EnterAnimalName();
+            EnterAnimalId();
 
             var animals =
                 from a in db.Animals
                 join c in db.Adopters on a.Adopter_Id equals c.Adopter_Id
-                where (a.Name == nameInput && a.Animal_Id == tagInput && a.Status == "Adopted")
+                where (a.Name == newAnimals.Name && a.Animal_Id == newAnimals.Animal_Id && a.Status == "Adopted")
                 select a;
 
             if (!animals.Any())
             {
-                Console.WriteLine("This record does not exist.");
+                Console.WriteLine("This record does not exist.  Please try again.");
+                GetAdoptedAnimal();
+                return;
             }
             else
             {
                 foreach (var a in animals)
                 {
-                    Console.WriteLine("\n{0} adopted by {1} {2}", a.Name, a.Adopter.First_Name, a.Adopter.Last_Name);
+                    Console.WriteLine("\n{0} - adopted by {1} {2}", a.Name, a.Adopter.First_Name, a.Adopter.Last_Name);
                 }
             }
-
         }
 
-        public void EnterRoomInformation()
+        public void AddRoomInformation()
         {
-            Console.WriteLine("Room: ");
+            Console.WriteLine("Room Number: ");
             try
             {
                 newRoom.Room_Number = Convert.ToInt32(Console.ReadLine());
@@ -202,32 +330,10 @@ namespace HumaneSociety
             catch (FormatException)
             {
                 Console.WriteLine("Invalid input.  Please enter a number.");
-                EnterRoomInformation();
+                AddRoomInformation();
                 return;
             }
             CheckRoomStatus();
-
-            var rooms =
-                from r in db.Rooms
-                where r.Room_Number == newRoom.Room_Number
-                select r;
-
-            if (!rooms.Any())
-            {
-                Console.WriteLine("This record does not exist.");
-            }
-            else
-            {
-                foreach (var r in rooms)
-                {
-                    Console.WriteLine(r.Room_Id + " " + r.Room_Number);
-                    newAnimals.Room = r;
-                }
-            }
-            //newAnimals.Room = newRoom;
-
-
-            db.SubmitChanges();
         }
 
         public void CheckRoomStatus()
@@ -243,10 +349,9 @@ namespace HumaneSociety
                 foreach (var r in rooms)
                 {
                     if (newRoom.Room_Number == r.Room_Number)
-                    {
-                        
+                    {                        
                         Console.WriteLine("Room is not available.  Please choose another one.");
-                        EnterRoomInformation();
+                        AddRoomInformation();
                         return;
                     }                  
                 }
@@ -254,10 +359,49 @@ namespace HumaneSociety
             }
         }
 
+        public void AddRoom()
+        {
+            var rooms = db.Rooms.Where(r => r.Room_Number == newRoom.Room_Number);
+
+            if (!rooms.Any())
+            {
+                Console.WriteLine("This record does not exist.");
+            }
+            else
+            {
+                foreach (var r in rooms)
+                {
+                    newAnimals.Room = r;
+                }
+            }
+
+            db.SubmitChanges();
+        }
+
+        public void AddAdoptionFee()
+        {
+            var adoptionFees = db.AdoptionFees.Where(f => f.Adoption_Fee == newAdoptionFee.Adoption_Fee);
+
+            if (!adoptionFees.Any())
+            {
+                Console.WriteLine("This record does not exist.");
+            }
+            else
+            {
+                foreach (var f in adoptionFees)
+                {
+                    newAnimals.AdoptionFee = f;
+                }
+            }
+
+            db.SubmitChanges();
+        }
+
         public void GetAvailableRooms()
         {
             var rooms = db.Rooms.Where(a => !db.Animals.Any(r => r.Room_Id == a.Room_Id));
 
+            Console.WriteLine("\nAvailable Rooms");
             foreach (var r in rooms)
             {
                 Console.WriteLine("Room: " + r.Room_Number);
@@ -266,12 +410,14 @@ namespace HumaneSociety
 
         public void GetRoomNumber()
         {
-            int roomInput;
+            //int roomInput;
 
-            Console.WriteLine("Enter Room Number: ");
-            roomInput = Convert.ToInt32(Console.ReadLine());
+            //Console.WriteLine("Enter Room Number: ");
+            //roomInput = Convert.ToInt32(Console.ReadLine());
 
-            var animals = db.Animals.Where(a => a.Room.Room_Number == roomInput);
+            EnterRoomNumber();
+
+            var animals = db.Animals.Where(a => a.Room.Room_Number == newRoom.Room_Number);
 
             if (!animals.Any())
             {
@@ -281,27 +427,30 @@ namespace HumaneSociety
             {
                 foreach (var a in animals)
                 {
-                    Console.WriteLine("Room {0} is occupied by {1}.", a.Room.Room_Number, a.Name);
+                    Console.WriteLine("\nRoom {0} is occupied by {1}.", a.Room.Room_Number, a.Name);
                 }
             }
         }
 
         public void GetRoomByAnimal()
         {
-            string nameInput;
-            int tagInput;
+            //string nameInput;
+            //int tagInput;
 
-            Console.WriteLine("Enter Animal's Name: ");
-            nameInput = Console.ReadLine();
+            //Console.WriteLine("Enter Animal's Name: ");
+            //nameInput = Console.ReadLine();
 
-            Console.WriteLine("Enter Animal's Tag Id: ");
-            tagInput = Convert.ToInt32(Console.ReadLine());
+            //Console.WriteLine("Enter Animal's Tag Id: ");
+            //tagInput = Convert.ToInt32(Console.ReadLine());
 
-            var animals = db.Animals.Where(a => a.Name == nameInput && a.Animal_Id == tagInput);
+            EnterAnimalName();
+            EnterAnimalId();
+
+            var animals = db.Animals.Where(a => a.Name == newAnimals.Name && a.Animal_Id == newAnimals.Animal_Id);
 
             foreach (var a in animals)
             {
-                Console.WriteLine("Room {0} is occupied by {1}.", a.Room.Room_Number, a.Name);
+                Console.WriteLine("\nRoom {0} is occupied by {1}.", a.Room.Room_Number, a.Name);
             }
         }
 
@@ -317,16 +466,19 @@ namespace HumaneSociety
 
         public void UpdateShots()
         {
-            string nameInput;
-            int tagInput;
+            //string nameInput;
+            //int tagInput;
 
-            Console.WriteLine("Enter Animal's Name: ");
-            nameInput = Console.ReadLine();
+            //Console.WriteLine("Enter Animal's Name: ");
+            //nameInput = Console.ReadLine();
 
-            Console.WriteLine("Enter Animal's Tag Id: ");
-            tagInput = Convert.ToInt32(Console.ReadLine());
+            //Console.WriteLine("Enter Animal's Tag Id: ");
+            //tagInput = Convert.ToInt32(Console.ReadLine());
 
-            var animals = db.Animals.Where(a => a.Name == nameInput && a.Animal_Id == tagInput);
+            EnterAnimalName();
+            EnterAnimalId();
+
+            var animals = db.Animals.Where(a => a.Name == newAnimals.Name && a.Animal_Id == newAnimals.Animal_Id);
 
             if (!animals.Any())
             {
@@ -373,25 +525,26 @@ namespace HumaneSociety
 
         public void GetAnimalCategories()
         {
-            var animals =
-                (from a in db.Animals
-                select a.Category).Distinct();
+            var animals = db.Animals.Select(a => a.Category).Distinct();
 
+            Console.WriteLine("\nCategory of Animals:");
             foreach (var a in animals)
             {
-                Console.WriteLine("Animal Category: {0}", a);
+                Console.WriteLine(a);
             }
         }
 
         public void GetAnimalsInACategory()
         {
-            string categoryInput;
+            //string categoryInput;
             int count = 0;
 
-            Console.WriteLine("Enter category of an animal: ");
-            categoryInput = Console.ReadLine();
+            //Console.WriteLine("Enter category of an animal: ");
+            //categoryInput = Console.ReadLine();
 
-            var animals = db.Animals.Where(a => a.Category == categoryInput);
+            EnterAnimalCategory();
+
+            var animals = db.Animals.Where(a => a.Category == newAnimals.Category);
 
             if (!animals.Any())
             {
@@ -410,16 +563,19 @@ namespace HumaneSociety
 
         public void GetFood()
         {
-            string nameInput;
-            int tagInput;
+            //string nameInput;
+            //int tagInput;
 
-            Console.WriteLine("Enter Animal's Name: ");
-            nameInput = Console.ReadLine();
+            //Console.WriteLine("Enter Animal's Name: ");
+            //nameInput = Console.ReadLine();
 
-            Console.WriteLine("Enter Animal's Tag Id: ");
-            tagInput = Convert.ToInt32(Console.ReadLine());
+            //Console.WriteLine("Enter Animal's Tag Id: ");
+            //tagInput = Convert.ToInt32(Console.ReadLine());
 
-            var animals = db.Animals.Where(a => a.Name == nameInput && a.Animal_Id == tagInput);
+            EnterAnimalName();
+            EnterAnimalId();
+
+            var animals = db.Animals.Where(a => a.Name == newAnimals.Name && a.Animal_Id == newAnimals.Animal_Id);
 
             if (!animals.Any())
             {
@@ -436,20 +592,25 @@ namespace HumaneSociety
 
         public void UpdateFoodDiet()
         {
-            string nameInput;
-            int tagInput;
-            string foodInput;
+            //string nameInput;
+            //int tagInput;
+            //string foodInput;
 
-            Console.WriteLine("Enter Animal's Name: ");
-            nameInput = Console.ReadLine();
+            //Console.WriteLine("Enter Animal's Name: ");
+            //nameInput = Console.ReadLine();
 
-            Console.WriteLine("Enter Animal's Tag Id: ");
-            tagInput = Convert.ToInt32(Console.ReadLine());
+            //Console.WriteLine("Enter Animal's Tag Id: ");
+            //tagInput = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Enter new Food amount: ");
-            foodInput = Console.ReadLine();
+            //Console.WriteLine("Enter new Food amount: ");
+            //foodInput = Console.ReadLine();
 
-            var animals = db.Animals.Where(a => a.Name == nameInput && a.Animal_Id == tagInput);
+            EnterAnimalName();
+            EnterAnimalId();
+            Console.WriteLine("\nEnter new Food amount: ");
+            EnterAnimalFood();
+
+            var animals = db.Animals.Where(a => a.Name == newAnimals.Name && a.Animal_Id == newAnimals.Animal_Id);
 
             if (!animals.Any())
             {
@@ -459,7 +620,7 @@ namespace HumaneSociety
             {
                 foreach (var a in animals)
                 {
-                    a.Food = foodInput;
+                    a.Food = newAnimals.Food;
                 }
                 db.SubmitChanges();
 
@@ -535,5 +696,7 @@ namespace HumaneSociety
                 }              
             }
         }
+
+
     }
 }
