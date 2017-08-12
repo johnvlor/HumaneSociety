@@ -10,11 +10,13 @@ namespace HumaneSociety
     {
         DataClassesDataContext db;
         Adopter newAdopter;
+        HumaneSociety humaneSociety;
 
         public Customer()
         {
             db = new DataClassesDataContext();
             newAdopter = new Adopter();
+            humaneSociety = new HumaneSociety();
         }
 
         public void CreateProfile()
@@ -70,32 +72,51 @@ namespace HumaneSociety
             db.SubmitChanges();
         }
 
-        public void SearchAnimals()
+        public void SearchAllAvailableAnimals()
         {
-            string nameInput;
-            string categoryInput;
+            var animals = db.Animals;
 
-            Console.WriteLine("Please enter your search criteria");
+            Console.WriteLine("All Available Animals for Adoption");
+            foreach (var a in animals)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Tag ID: " + a.Animal_Id);
+                Console.WriteLine("Name: " + a.Name);
+                Console.WriteLine("Category: " + a.Category);
+                Console.WriteLine("Gender: " + a.Gender);
+                Console.WriteLine("Age: " + a.Age);
+                Console.WriteLine("Shots: " + a.Shots);
+                Console.WriteLine("Food: " + a.Food);
+                Console.WriteLine("Adoption Fee: $" + a.AdoptionFee.Adoption_Fee);
+            }
+        }
 
-            Console.WriteLine("Enter Animal's Name: ");
-            nameInput = Console.ReadLine();
+        public void SearchAnimalsInACategory()
+        {
+            int count = 0;
 
-            Console.WriteLine("Enter an Animal Category: ");
-            categoryInput = Console.ReadLine();
+            humaneSociety.EnterAnimalCategory();
 
-            var animals = db.Animals.Where(a => a.Name == nameInput || a.Category == categoryInput);
+            var animals = db.Animals.Where(a => a.Category == humaneSociety.newAnimals.Category);
 
             if (!animals.Any())
             {
-                Console.WriteLine("This record does not exist.");
+                Console.WriteLine("This data does not exist.");
             }
             else
             {
                 foreach (var a in animals)
                 {
-                    Console.WriteLine(a.Name);
-                    Console.WriteLine(a.Category);
+                    Console.WriteLine("\nName: " + a.Name);
+                    Console.WriteLine("Category: " + a.Category);
+                    Console.WriteLine("Gender: " + a.Gender);
+                    Console.WriteLine("Age: " + a.Age);
+                    Console.WriteLine("Shots: " + a.Shots);
+                    Console.WriteLine("Food: " + a.Food);
+                    Console.WriteLine("Adoption Fee: $" + a.AdoptionFee.Adoption_Fee);
+                    count++;
                 }
+                Console.WriteLine("\nTotal: {0}", count);
             }
         }
     }

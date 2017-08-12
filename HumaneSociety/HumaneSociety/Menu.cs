@@ -42,7 +42,8 @@ namespace HumaneSociety
                 "\n4. Shots" +
                 "\n5. Animal Category" +
                 "\n6. Food" +
-                "\n7. Customer");
+                "\n7. Customer" +
+                "\n8. Import CSV File");
             input = Console.ReadLine();
         }
 
@@ -107,6 +108,14 @@ namespace HumaneSociety
             input = Console.ReadLine();
         }
 
+        public void DisplayCustomerSearchMenu()
+        {
+            Console.WriteLine("\nEnter a search option:" +
+                "\n1. All available Pets" +
+                "\n2. Pet Category");
+            input = Console.ReadLine();
+        }
+
         public void GetMainMenuOption()
         {
             switch (input)
@@ -159,6 +168,9 @@ namespace HumaneSociety
                 case "7":
                     DisplayAdoptingCustomerMenu();
                     GetAdoptingCustomerMenuOption();
+                    break;
+                case "8":
+                    humaneSociety.ImportCSVFile();
                     break;
                 default:
                     break;
@@ -280,7 +292,23 @@ namespace HumaneSociety
                     //customer.AddCustomerToDatabase();
                     break;
                 case "2":
-                    customer.SearchAnimals();
+                    DisplayCustomerSearchMenu();
+                    GetCustomerSearchMenuOption();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void GetCustomerSearchMenuOption()
+        {
+            switch (input)
+            {
+                case "1":
+                    customer.SearchAllAvailableAnimals();
+                    break;
+                case "2":
+                    customer.SearchAnimalsInACategory();
                     break;
                 default:
                     break;

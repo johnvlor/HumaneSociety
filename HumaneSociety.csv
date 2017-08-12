@@ -1,0 +1,4 @@
+Name,Category,Gender,Age,Shots,Food,Status,Room_Id,Adopter_Id,Adoption_Fee_Id
+Pikachu,gerbal,male,4 years,no,3 lbs,Available,11,,1
+Charazard,dog,male,6 years,yes,5 lbs,,7,,3
+Meow,cat,male,1 years,yes,2 lbs,,23,,2

@@ -4,6 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Linq;
+using System.Data.OleDb;
+using System.Data.SqlClient;
+using System.IO;
+using System.Configuration;
+using System.Data;
 
 namespace HumaneSociety
 {
@@ -697,6 +702,50 @@ namespace HumaneSociety
             }
         }
 
+        public void ImportCSVFile()
+        {
+            var query = (from line in File.ReadLines(@"C:\\Users\Lor\Documents\Projects\C#\HumaneSociety\HumaneSociety.csv")
+                        let csvLines = line.Split(';')
+                        from csvLine in csvLines
+                        where !String.IsNullOrWhiteSpace(csvLine)
+                        let data = csvLine.Split(',')
+                        select new
+                        {
+                            name = data[0],
+                            category = data[1],
+                            gender = data[2],
+                            age = data[3],
+                            shots = data[4],
+                            food = data[5],
+                            status = data[6],
+                            room_id = data[7],
+                            //adopter_id = data[8],
+                            adoption_fee_id = data[9]
+                        }).Skip(1);
+
+            var animals = db.Animals;
+
+            foreach (var q in query)
+            {
+                //Console.WriteLine(q.name);
+                //Console.WriteLine(q.category);
+                //Console.WriteLine(q.adopter_id);
+                newAnimals.Name = q.name;
+                newAnimals.Category = q.category;
+                newAnimals.Gender = q.gender;
+                newAnimals.Age = q.age;
+                newAnimals.Shots = q.shots;
+                newAnimals.Food = q.food;
+                newAnimals.Status = q.status;
+                newAnimals.Room_Id = int.Parse(q.room_id);
+                //newAnimals.Adopter_Id = q.adopter_id;
+                newAnimals.Adoption_Fee_Id = int.Parse(q.adoption_fee_id);
+
+                //db.Animals.InsertOnSubmit(newAnimals);
+                db.SubmitChanges();
+            }
+
+        }
 
     }
 }
