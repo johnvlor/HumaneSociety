@@ -8,14 +8,16 @@ namespace HumaneSociety
 {
     class Menu
     {
-        string input;
-        HumaneSociety humaneSociety;
-        Customer customer;
+        private string input;
+        private HumaneSociety humaneSociety;
+        private Customer customer;
+        private Import import;
 
         public Menu()
         {
             humaneSociety = new HumaneSociety();
             customer = new Customer();
+            import = new Import();
         }
 
         public void Run()
@@ -26,16 +28,24 @@ namespace HumaneSociety
 
         public void DisplayMainMenu()
         {
-            Console.WriteLine("Humane Society Pet System");
+            Console.WriteLine("\nHumane Society Pet System");
             Console.WriteLine("Log in as Employee or Customer" +
                 "\n1. Employee" +
                 "\n2. Customer");
             input = Console.ReadLine();
+
+            if (input != "1" && input != "2")
+            {
+                Console.WriteLine("Invalid input.  Please choose an option provided.");
+                DisplayMainMenu();
+                return;               
+            }
+
         }
 
         public void DisplayEmployeeMenu()
         {           
-            Console.WriteLine("Enter an option:" +
+            Console.WriteLine("\nEnter an option:" +
                 "\n1. Add an animal to the system" +
                 "\n2. Adoption Process" +
                 "\n3. Room" +
@@ -43,8 +53,16 @@ namespace HumaneSociety
                 "\n5. Animal Category" +
                 "\n6. Food" +
                 "\n7. Customer" +
-                "\n8. Import CSV File");
+                "\n8. Report" +
+                "\n9. Import CSV File");
             input = Console.ReadLine();
+
+            if (input != "1" && input != "2" && input != "3" && input != "4" && input != "5" && input != "6" && input != "7" && input != "8" && input != "9")
+            {
+                Console.WriteLine("Invalid input.  Please choose an option provided.");
+                DisplayEmployeeMenu();
+                return;
+            }
         }
 
         public void DisplayAdoptionMenu()
@@ -54,6 +72,13 @@ namespace HumaneSociety
                 "\n2. Look up an Adopted Animal" +
                 "\n3. Display all Adopted animals");
             input = Console.ReadLine();
+
+            if (input != "1" && input != "2" && input != "3")
+            {
+                Console.WriteLine("Invalid input.  Please choose an option provided.");
+                DisplayAdoptionMenu();
+                return;
+            }
         }
 
         public void DisplayRoomMenu()
@@ -64,6 +89,14 @@ namespace HumaneSociety
                 "\n3. Display all occupied rooms" +
                 "\n4. Display all available rooms");
             input = Console.ReadLine();
+
+            if (input != "1" && input != "2" && input != "3" && input != "3")
+            {
+                Console.WriteLine("Invalid input.  Please choose an option provided.");
+                DisplayRoomMenu();
+                return;
+            }
+
         }
 
         public void DisplayShotsMenu()
@@ -73,6 +106,13 @@ namespace HumaneSociety
                 "\n2. Display all animals with shots" +
                 "\n3. Display all animals that still needs shots");
             input = Console.ReadLine();
+
+            if (input != "1" && input != "2" && input != "3")
+            {
+                Console.WriteLine("Invalid input.  Please choose an option provided.");
+                DisplayShotsMenu();
+                return;
+            }
         }
 
         public void DisplayCategoryMenu()
@@ -81,6 +121,13 @@ namespace HumaneSociety
                 "\n1. Display animal categories." +
                 "\n2. Display all animals of a category");
             input = Console.ReadLine();
+
+            if (input != "1" && input != "2")
+            {
+                Console.WriteLine("Invalid input.  Please choose an option provided.");
+                DisplayCategoryMenu();
+                return;
+            }
         }
 
         public void DisplayFoodMenu()
@@ -89,6 +136,13 @@ namespace HumaneSociety
                 "\n1. By Animal" +
                 "\n2. Update Food Amount");
             input = Console.ReadLine();
+
+            if (input != "1" && input != "2")
+            {
+                Console.WriteLine("Invalid input.  Please choose an option provided.");
+                DisplayFoodMenu();
+                return;
+            }
         }
 
         public void DisplayAdoptingCustomerMenu()
@@ -98,6 +152,28 @@ namespace HumaneSociety
                 "\n2. By Animal Preference" +
                 "\n3. Display all potential adopting customers");
             input = Console.ReadLine();
+
+            if (input != "1" && input != "2" && input != "3")
+            {
+                Console.WriteLine("Invalid input.  Please choose an option provided.");
+                DisplayAdoptingCustomerMenu();
+                return;
+            }
+        }
+
+        public void DisplayReportMenu()
+        {
+            Console.WriteLine("\nEnter an option:" +
+                "\n1. All available animals" +
+                "\n2. All adopted animals");
+            input = Console.ReadLine();
+
+            if (input != "1" && input != "2")
+            {
+                Console.WriteLine("Invalid input.  Please choose an option provided.");
+                DisplayReportMenu();
+                return;
+            }
         }
 
         public void DisplayCustomerMenu()
@@ -106,6 +182,13 @@ namespace HumaneSociety
                 "\n1. Create a profile" +
                 "\n2. Search for Pets");
             input = Console.ReadLine();
+
+            if (input != "1" && input != "2")
+            {
+                Console.WriteLine("Invalid input.  Please choose an option provided.");
+                DisplayCustomerMenu();
+                return;
+            }
         }
 
         public void DisplayCustomerSearchMenu()
@@ -114,6 +197,18 @@ namespace HumaneSociety
                 "\n1. All available Pets" +
                 "\n2. Pet Category");
             input = Console.ReadLine();
+
+            if (input != "1" && input != "2")
+            {
+                Console.WriteLine("Invalid input.  Please choose an option provided.");
+                DisplayCustomerSearchMenu();
+                return;
+            }
+        }
+
+        public void DisplayCustomerAddition()
+        {
+            Console.WriteLine("\nThank you for your submission.  We'll be in contact with you to followup.");
         }
 
         public void GetMainMenuOption()
@@ -143,7 +238,6 @@ namespace HumaneSociety
                     humaneSociety.AddRoomInformation();
                     humaneSociety.AddRoom();
                     humaneSociety.AddAdoptionFee();
-                    humaneSociety.DisplayQuery();
                     break;
                 case "2":
                     DisplayAdoptionMenu();
@@ -170,9 +264,13 @@ namespace HumaneSociety
                     GetAdoptingCustomerMenuOption();
                     break;
                 case "8":
-                    humaneSociety.ImportCSVFile();
+                    DisplayReportMenu();
+                    GetReportMenuOption();
                     break;
-                default:
+                case "9":
+                    import.ImportCSVFile();
+                    break;
+                default: 
                     break;
             }
         }
@@ -289,7 +387,8 @@ namespace HumaneSociety
             {
                 case "1":
                     customer.CreateProfile();
-                    //customer.AddCustomerToDatabase();
+                    customer.AddCustomerToDatabase();
+                    DisplayCustomerAddition();
                     break;
                 case "2":
                     DisplayCustomerSearchMenu();
@@ -308,7 +407,89 @@ namespace HumaneSociety
                     customer.SearchAllAvailableAnimals();
                     break;
                 case "2":
+                    humaneSociety.GetAnimalCategories();
                     customer.SearchAnimalsInACategory();
+                    PromptToNarrowSearch();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void GetReportMenuOption()
+        {
+            switch (input)
+            {
+                case "1":
+                    humaneSociety.GetAllAvailableAnimals();
+                    break;
+                case "2":
+                    humaneSociety.GetAllAdoptedAnimals();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void PromptToNarrowSearch()
+        {
+            Console.WriteLine("\nWould you like to narrow your search criteria?  Please enter yes or no.");
+            input = Console.ReadLine().ToLower();
+
+            if (input == "yes")
+            {
+                NarrowSearch();
+            }
+            else if (input == "no")
+            {
+                Console.WriteLine("Thank you for searching.");
+            }
+            else
+            {
+                Console.WriteLine("Invalid input.  Please enter yes or no.");
+                PromptToNarrowSearch();
+                return;
+            }
+        }
+
+        public void NarrowSearch()
+        {
+            Console.WriteLine("\nPlease enter next search criteria." +
+                "\n1. gender" +
+                "\n2. age" +
+                "\n3. shots" +
+                "\n4. food");
+            input = Console.ReadLine().ToLower();
+
+            if (input == "1" || input == "2" || input == "3" || input == "4")
+            {
+                SearchCriteria();
+            }
+            else
+            {
+                Console.WriteLine("Invalid input.  Please choose one of the options provided.");
+                NarrowSearch();
+                return;
+            }
+        }
+
+        public void SearchCriteria()
+        {
+            switch (input)
+            {
+                case "1":
+                    customer.SearchByAdditionalGender();
+                    break;
+                case "2":
+                    customer.GetAgeList();
+                    customer.SearchByAdditionalAge();
+                    break;
+                case "3":
+                    customer.SearchByAdditionalShots();
+                    break;
+                case "4":
+                    customer.GetFoodList();
+                    customer.SearchByAdditionalFood();
                     break;
                 default:
                     break;
